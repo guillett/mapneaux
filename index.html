@@ -70,17 +70,20 @@
           'type': 'circle',
           'paint': {
               'circle-radius': 10,
-              'circle-color': { "type": "identity", "property": "color" },
+              'circle-color':  [
+                "interpolate-hcl",
+                ["linear"],
+                ["get", "delai"],
+                0,
+                ["get", "color"],
+                240,
+                "grey"
+              ],
               'circle-stroke-width': 2,
               'circle-stroke-color': { "type": "identity", "property": "strokeColor" },
               'circle-blur': { "type": "identity", "property": "blur" },
-          },/*
-          type: 'symbol',
-          layout: {
-            'text-field': 'GO'
-          }*/
+          },
       });
-
 
       // When a click event occurs on a feature in the places layer, open a popup at the
       // location of the feature, with description HTML from its properties.
@@ -115,13 +118,10 @@
         alert("ok")
       })
 
-
-
     grist.ready({
       allowSelectBy: true,
       requiredAccess: 'read table',
     });
-
 
     // Adopté => oui/non => contour
     // À faire Couleur
@@ -136,8 +136,9 @@
                 description: record.Description,
                 icon: 'marker',
                 strokeColor: record.Adoptions.length ? 'green' : 'black',
-                color: '#007cbf',
-                blur: 0,//.3,
+                color: record.Couleur,
+                blur: record.Delai/240/2,
+                delai: record.Delai,
             },
             geometry: {
                 type: 'Point',
